@@ -1,10 +1,27 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <component :is="component">
+    <router-view></router-view>
+  </component>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+export default defineComponent({
+  setup() {
+    let component = ref("page-layout");
+    const route = useRoute();
+
+    watch(route, (newRoute) => {
+      component.value = newRoute.meta?.layout + "" || "page-layout";
+    });
+    return {
+      component,
+    };
+  },
+});
+</script>
 
 <style>
 #app {
@@ -13,18 +30,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

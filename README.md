@@ -27,3 +27,14 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### NODE version
+16.15.0
+
+### NPM usados
+vue-router
+axios
+pinia
+
+

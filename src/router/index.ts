@@ -1,26 +1,41 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { createRouter, RouteRecordRaw, createWebHistory } from "vue-router";
+import PokemonRouter from "@/modules/pokemon/router";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "home",
-    component: HomeView,
+    path: "/pokemon",
+    ...PokemonRouter,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: "/",
+    redirect: { name: "home" },
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+      import(
+        /* webpackChunkName: "not-page-found"*/ "@/common/views/NotFoundPage.vue"
+      ),
   },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.VUE_APP_BASE_NAME),
+  scrollBehavior(to) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: "smooth",
+      };
+    }
+    return { left: 0, top: 0, behavior: "smooth" };
+  },
   routes,
+});
+
+router.afterEach((to) => {
+  document.title = to.meta?.title + "" || "VueApp";
 });
 
 export default router;
